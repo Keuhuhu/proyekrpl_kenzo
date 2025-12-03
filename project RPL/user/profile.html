@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - Klinik Unsri</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <a href="../home.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Beranda</span>
+            </a>
+            <a href="profile.html" class="top-nav-item active">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Profil</span>
+            </a>
+            <a href="riwayat.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Riwayat</span>
+            </a>
+        </nav>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+                    <span class="logo-text">Profil Saya</span>
+                </div>
+                <a href="pengaturan.html" class="settings-btn">⚙️</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-photo">
+                    <img src="../aset/profilfr.png" alt="Profile Photo">
+                </div>
+                <h2 class="profile-name" id="displayNama">nama</h2>
+                <p class="profile-info" id="displayInfo">jenis kelamin | umur</p>
+                <a href="edit-profile.html" class="btn-edit">Edit Profile</a>
+            </div>
+
+            <!-- Alamat Section -->
+            <div class="section">
+                <h3 class="section-title">Alamat</h3>
+                <div class="section-content">
+                    <p id="displayAlamat">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+          
+        </div>
+    </div>
+
+    <!-- Link ke file JavaScript terpisah -->
+    <script src="profile.js"></script>
+</body>
+</html>

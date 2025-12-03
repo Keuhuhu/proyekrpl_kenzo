@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - Klinik Unsri</title>
+    <link rel="stylesheet" href="pengaturan.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <a href="../home.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Beranda</span>
+            </a>
+            <a href="profile.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Profil</span>
+            </a>
+            <a href="riwayat.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Riwayat</span>
+            </a>
+        </nav>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+                    <span class="logo-text">Pengaturan</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Pusat Bantuan Section -->
+            <div class="section">
+                <h3 class="section-title">
+                    <img src="../aset/pusat-bantuan.png" alt="Bantuan" class="section-icon">
+                    Pusat Bantuan
+                </h3>
+                <div class="menu-list">
+                    <a href="https://wa.me/6289667815060" class="menu-item">
+                        <img src="../aset/whatsapp.png" alt="WhatsApp" class="menu-icon-img">
+                        <span>WhatsApp</span>
+                    </a>
+                    
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kuhuhualter@gmail.com" class="menu-item">
+                            <img src="../aset/email.png" alt="Email" class="menu-icon-img">
+                            <span>Email</span>
+                        </a>
+                    
+                    <a href="https://www.instagram.com/novelita_difani/" class="menu-item">
+                        <img src="../aset/instagram.png" alt="Instagram" class="menu-icon-img">
+                        <span>Instagram</span>
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Pengaturan Akun Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleAkun()">
+                    <h3 class="section-title">
+                        <img src="../aset/pengaturan-akun.png" alt="User" class="section-icon">
+                        Pengaturan Akun
+                    </h3>
+                    <svg class="chevron" id="chevron-akun" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                
+                <div class="menu-list submenu" id="akun-menu"> 
+                    <a href="#" onclick="deleteAccount()" class="menu-item">
+                        <img src="../aset/hapus-akun.png" alt="Hapus Akun" class="menu-icon-img">
+                         <span>Hapus Akun</span>
+                    </a>
+    
+                    <a href="#" onclick="logout()" class="menu-item">
+                         <img src="../aset/keluar.png" alt="Keluar" class="menu-icon-img">
+                           <span>Keluar</span>
+                    </a>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleBahasa() {
+            const menu = document.getElementById('bahasa-menu');
+            const chevron = document.getElementById('chevron-bahasa');
+            menu.classList.toggle('active');
+            chevron.classList.toggle('rotate');
+        }
+
+        function toggleAkun() {
+            const menu = document.getElementById('akun-menu');
+            const chevron = document.getElementById('chevron-akun');
+            menu.classList.toggle('active');
+            chevron.classList.toggle('rotate');
+        }
+
+        //logout
+        function logout() {
+            if (confirm("Apakah kamu yakin ingin keluar dari akun?")) {
+                localStorage.clear(); //hapus local storage
+                window.location.href = 'login.html';
+            }
+        }
+
+        //hapus akun
+        async function deleteAccount() {
+            // Konfirmasi 1
+            if (!confirm("⚠️ PERINGATAN: Apakah Anda yakin ingin menghapus akun ini?")) {
+                return;
+            }
+            // Konfirmasi 2 (Biar aman banget)
+            if (!confirm("Tindakan ini tidak bisa dibatalkan. Data Anda akan hilang permanen. Lanjutkan?")) {
+                return;
+            }
+            const token = localStorage.getItem('token_user');
+            
+            if (!token) {
+                alert("Error: Token tidak ditemukan. Silakan login ulang.");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/users/profile', {
+                    method: 'DELETE', // Metode DELETE
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Akun berhasil dihapus. Sampai jumpa!");
+                    
+                    // BERSIHKAN JEJAK (Sama seperti logout)
+                    localStorage.clear();
+                    
+                    // TENDANG KE LOGIN
+                    window.location.href = 'login.html';
+                } else {
+                    alert("Gagal: " + result.message);
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan koneksi ke server.");
+            }
+        }
+    </script>
+</body>
+</html>

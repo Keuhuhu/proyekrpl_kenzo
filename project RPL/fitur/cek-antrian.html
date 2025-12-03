@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Antrian - Klinik Unsri</title>
+    <link rel="stylesheet" href="cek-antrian.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <a href="../home.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Beranda</span>
+            </a>
+            <a href="../user/profile.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Profil</span>
+            </a>
+            <a href="../user/riwayat.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Riwayat</span>
+            </a>
+        </nav>
+
+        <!-- Header with Back Button -->
+        <div class="header">
+            <a href="../home.html" class="back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Kembali
+            </a>
+            <h1 class="page-title">Antrian Sekarang</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Antrian Card -->
+            <div class="antrian-card">
+                <div class="doctor-info">
+                    <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                    <p class="doctor-name">Dr. Umum</p>
+                </div>
+                <div class="antrian-info">
+                    <div class="ruang-label">Ruang 01</div>
+                    <div class="antrian-numbers">
+                        <div class="antrian-col">
+                            <span class="label">Sekarang</span>
+                            <span class="number" id="now-Dr. Umum">-</span>
+                        </div>
+                        <div class="antrian-col">
+                            <span class="label">Selanjutnya</span>
+                            <span class="number" id="next-Dr. Umum">02</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="antrian-card">
+                <div class="doctor-info">
+                    <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                    <p class="doctor-name">Dr. Gigi</p>
+                </div>
+                <div class="antrian-info">
+                    <div class="ruang-label">Ruang 02</div>
+                    <div class="antrian-numbers">
+                        <div class="antrian-col">
+                            <span class="label">Sekarang</span>
+                            <span class="number" id="now-Dr. Gigi">-</span>
+                        </div>
+                        <div class="antrian-col">
+                            <span class="label">Selanjutnya</span>
+                            <span class="number" id="next-Dr. Gigi">13</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="antrian-card">
+                <div class="doctor-info">
+                    <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                    <p class="doctor-name">Dr. Anak</p>
+                </div>
+                <div class="antrian-info">
+                    <div class="ruang-label">Ruang 03</div>
+                    <div class="antrian-numbers">
+                        <div class="antrian-col">
+                            <span class="label">Sekarang</span>
+                            <span class="number" id="now-Dr. Anak">20</span>
+                        </div>
+                        <div class="antrian-col">
+                            <span class="label">Selanjutnya</span>
+                            <span class="number" id="next-Dr. Anak">21</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    async function updateDataAntrian() {
+        try {
+            const response = await fetch('http://localhost:3000/antrian/status');
+            const result = await response.json();
+            const semuaAntrian = result.data;
+
+            // Fungsi hitung logika baru
+            function hitung(namaDokter) {
+                // 1. Ambil data milik dokter ini saja
+                const dataDokter = semuaAntrian.filter(item => item.nama_dokter === namaDokter);
+                
+                // 2. Cari yang statusnya masih 'menunggu' & Urutkan dari kecil ke besar
+                const antrianMenunggu = dataDokter
+                    .filter(item => item.status === 'menunggu')
+                    .sort((a, b) => a.nomor_antrian - b.nomor_antrian);
+
+                // 3. Tentukan "Sekarang" (Antrian paling depan / urutan pertama)
+                const sekarang = antrianMenunggu.length > 0 ? antrianMenunggu[0].nomor_antrian : "-";
+
+                // 4. Tentukan "Selanjutnya" (Antrian urutan kedua)
+                // Kita cek apakah ada orang kedua di antrian?
+                const selanjutnya = antrianMenunggu.length > 1 ? antrianMenunggu[1].nomor_antrian : "-";
+
+                // 5. Update HTML
+                const elNow = document.getElementById(`now-${namaDokter}`);
+                const elNext = document.getElementById(`next-${namaDokter}`); // ID Baru
+                
+                if(elNow) elNow.innerText = sekarang;
+                if(elNext) elNext.innerText = selanjutnya;
+            }
+
+            // Panggil untuk setiap dokter yang ada di HTML kamu
+            // Pastikan nama ini SAMA PERSIS dengan value di database/dropdown
+            hitung("Dr. Umum"); 
+            hitung("Dr. Gigi");
+            hitung("Dr. Anak");
+
+        } catch (error) {
+            console.error("Gagal update antrian", error);
+        }
+    }
+
+    // Jalankan saat buka halaman
+    updateDataAntrian();
+
+    // Update otomatis setiap 3 detik
+    setInterval(updateDataAntrian, 3000);
+</script>
+
+</body>
+</html>

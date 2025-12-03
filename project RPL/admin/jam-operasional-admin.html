@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Jam Operasional</title>
+    <link rel="stylesheet" href="jam-operasional-admin.css">
+    <style>
+        /* Tambahan CSS biar Input terlihat rapi */
+        .time-input {
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
+            width: 150px;
+            font-family: inherit;
+            text-align: right;
+        }
+        .btn-simpan {
+            background-color: #5DADE2; color: white;
+            padding: 15px; width: 100%; border: none;
+            border-radius: 10px; font-size: 16px; font-weight: bold;
+            cursor: pointer; margin-top: 20px;
+        }
+        .btn-simpan:hover { background-color: #5DADE2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <a href="admin-home.html" class="back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Kembali
+            </a>
+            <h1 class="page-title">Edit Jam Operasional</h1>
+        </div>
+
+        <div class="content">
+            <div id="scheduleContainer">
+                <p style="text-align:center;">Memuat data...</p>
+            </div>
+
+            <button class="btn-simpan" onclick="simpanJadwal()">SIMPAN PERUBAHAN</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. LOAD DATA SAAT HALAMAN DIBUKA
+        async function loadJadwal() {
+            try {
+                const response = await fetch('http://localhost:3000/users/jam'); // Sesuaikan route
+                const result = await response.json();
+                
+                const data = result.data;
+                const container = document.getElementById('scheduleContainer');
+                container.innerHTML = ""; // Bersihkan loading
+
+                // Pisahkan data Indralaya dan Palembang
+                const indralaya = data.filter(item => item.cabang === 'Indralaya');
+                const palembang = data.filter(item => item.cabang === 'Palembang');
+
+                // Render Fungsi Helper
+                function renderSection(title, items) {
+                    let html = `<div class="cabang-section"><h2 class="cabang-title">${title}</h2><div class="schedule-list">`;
+                    
+                    items.forEach(item => {
+                        html += `
+                            <div class="schedule-item">
+                                <span class="day">${item.hari}</span>
+                                <input type="text" class="time-input" value="${item.jam}" data-id="${item.id}">
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div></div>`;
+                    return html;
+                }
+
+                container.innerHTML += renderSection("Cabang Indralaya", indralaya);
+                container.innerHTML += renderSection("Cabang Palembang", palembang);
+
+            } catch (error) {
+                console.error(error);
+                alert("Gagal memuat jadwal");
+            }
+        }
+
+        // 2. SIMPAN DATA KE DATABASE
+        async function simpanJadwal() {
+            const inputs = document.querySelectorAll('.time-input');
+            const dataUpdate = [];
+
+            // Ambil semua nilai dari input
+            inputs.forEach(input => {
+                dataUpdate.push({
+                    id: input.getAttribute('data-id'),
+                    jam: input.value
+                });
+            });
+
+            try {
+                const response = await fetch('http://localhost:3000/users/jam', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataUpdate)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert("Berhasil! Jam operasional telah diperbarui.");
+                    location.reload();
+                } else {
+                    alert("Gagal: " + result.message);
+                }
+            } catch (error) {
+                alert("Terjadi kesalahan koneksi");
+            }
+        }
+
+        // Jalankan load
+        loadJadwal();
+    </script>
+</body>
+</html>

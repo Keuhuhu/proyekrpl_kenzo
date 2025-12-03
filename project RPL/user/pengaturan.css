@@ -1,0 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Top Navigation */
+.top-nav {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.top-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #999;
+    flex: 1;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+.top-nav-item.active {
+    color: #8BC34A;
+}
+
+.top-nav-item:hover {
+    color: #8BC34A;
+}
+
+.top-nav-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.top-nav-label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Header */
+.header {
+    background: #8BC34A;
+    padding: 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.logo-text {
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Content */
+.content {
+    padding: 20px;
+    padding-bottom: 30px;
+}
+
+/* Section */
+.section {
+    background: white;
+    border: 2px solid #E8F5E9;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.menu-icon-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.section-header .chevron {
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.section-header .chevron.rotate {
+    transform: rotate(180deg);
+}
+
+/* Menu List */
+.menu-list {
+    margin-top: 15px;
+}
+
+.menu-list.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-top: 0;
+}
+
+.menu-list.submenu.active {
+    max-height: 300px;
+    margin-top: 15px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+}
+
+.menu-item:last-child {
+    margin-bottom: 0;
+}
+
+.menu-item:hover {
+    background: #E8F5E9;
+    transform: translateX(5px);
+}
+
+.menu-item svg {
+    color: #8BC34A;
+    flex-shrink: 0;
+}
+
+.menu-item span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.menu-item .flag {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-icon-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .container {
+        border-radius: 0;
+    }
+}

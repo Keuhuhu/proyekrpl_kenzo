@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Klinik Unsri</title>
+    <link rel="stylesheet" href="admin-login.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+            <span class="logo-text">Klinik Unsri</span>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="welcome">
+            <h1>SELAMAT<br>DATANG</h1>
+            <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-section">
+
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" id="adminId" placeholder="Masukkan ID anda.." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password anda.." required>
+                </div>
+
+                <button type="submit" class="btn-submit">Masuk</button>
+
+                <div class="divider">atau</div>
+
+                <a href="../user/login.html" class="link-umum">Masuk sebagai Umum</a>
+            </form>
+        </div>
+    </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Ambil data dari input
+        const adminId = document.getElementById('adminId').value; // Ini akan jadi username
+        const password = document.getElementById('password').value;
+        
+        try {
+            // 1. Kirim data ke Backend (Route Admin)
+            const response = await fetch('http://localhost:3000/users/admin-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // Perhatikan: Kita kirim 'username' karena di controller admin pakai 'username'
+                body: JSON.stringify({ 
+                    username: adminId, 
+                    password: password 
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // 2. JIKA SUKSES
+                alert("Login Admin Berhasil! Selamat datang " + result.data.nama);
+                
+                // Simpan Token & Identitas
+                // Kita gunakan nama key yang sama ('token_user') agar logika logout nanti bisa dipakai ulang
+                localStorage.setItem('token_user', result.token);
+                localStorage.setItem('nama_user', result.data.nama);
+                localStorage.setItem('role_user', 'admin'); 
+                
+                // Pindah ke Dashboard Admin
+                window.location.href = 'admin-home.html';
+            } else {
+                // 3. JIKA GAGAL (Password salah / ID tidak ketemu)
+                alert("Gagal Masuk: " + result.message);
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan koneksi ke server.");
+        }
+    });
+</script>
+
+</body>
+</html>

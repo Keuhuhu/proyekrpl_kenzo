@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Poliklinik - Admin</title>
+    <style>
+        /* CSS Sederhana & Bersih */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background-color: #f5f5f5; display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        .container {
+            width: 100%; max-width: 450px; background: white;
+            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden; min-height: 80vh; position: relative;
+        }
+
+        .header { background-color: #5DADE2; padding: 20px; display: flex; align-items: center; color: white; gap: 10px; }
+        .back-btn { text-decoration: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .page-title { font-size: 18px; font-weight: 700; margin-left: 10px; }
+
+        /* Tab Navigation */
+        .tab-container { display: flex; padding: 10px; background: white; border-bottom: 1px solid #eee; }
+        .tab {
+            flex: 1; padding: 10px; border: none; background: none;
+            font-weight: 600; color: #999; cursor: pointer; border-bottom: 3px solid transparent;
+        }
+        .tab.active { color: #5DADE2; border-bottom-color: #5DADE2; }
+
+        /* Content */
+        .content { padding: 20px; padding-bottom: 80px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Doctor Card (Edit Mode) */
+        .doctor-card {
+            border: 1px solid #eee; border-radius: 10px; padding: 15px;
+            margin-bottom: 15px; background: #fff;
+        }
+        .doctor-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .doctor-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .doctor-name { font-size: 16px; font-weight: 700; color: #333; }
+
+        .schedule-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid #f9f9f9;
+        }
+        .day-label { font-size: 13px; font-weight: 600; color: #666; width: 60px; }
+        
+        /* Input Edit Jam */
+        .time-input {
+            width: 140px; padding: 6px; border: 1px solid #ddd;
+            border-radius: 5px; font-size: 13px; text-align: center;
+            font-family: monospace; color: #333;
+        }
+        .time-input:focus { border-color: #5DADE2; outline: none; }
+
+        /* Floating Save Button */
+        .btn-save-container {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 20px; background: white; border-top: 1px solid #eee;
+        }
+        .btn-save {
+            width: 100%; padding: 15px; background-color: #5DADE2;
+            color: white; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(75, 105, 241, 0.512);
+        }
+        .btn-save:hover { background-color: #549aca; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="admin-home.html" class="back-btn">← Kembali</a>
+            <h1 class="page-title">Edit Jadwal Dokter</h1>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="switchTab('Umum')">Poli Umum</button>
+            <button class="tab" onclick="switchTab('THT')">Poli Gigi</button> 
+            <button class="tab" onclick="switchTab('Gigi')">Poli Anak</button>
+        </div>
+
+        <div class="content" id="mainContent">
+            <p style="text-align:center; margin-top:50px;">Memuat data...</p>
+        </div>
+
+        <div class="btn-save-container">
+            <button class="btn-save" onclick="simpanJadwal()">SIMPAN PERUBAHAN</button>
+        </div>
+    </div>
+
+    <script>
+        let allData = []; // Simpan semua data di sini
+
+        // 1. Load Data dari Database
+        async function loadData() {
+            try {
+                // Panggil API Backend
+                const response = await fetch('http://localhost:3000/users/jadwal-dokter');
+                const result = await response.json();
+                
+                if (result.data) {
+                    allData = result.data;
+                    switchTab('Umum'); // Tampilkan tab pertama default
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Gagal koneksi ke server.");
+            }
+        }
+
+        // 2. Fungsi Ganti Tab & Render
+        function switchTab(poliName) {
+            // Update UI Tab
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.includes(poliName) || (poliName === 'THT' && btn.innerText.includes('Gigi')) || (poliName === 'Gigi' && btn.innerText.includes('Anak'))) {
+                   btn.classList.add('active'); // Logika sederhana menyesuaikan label tab Anda
+                }
+                // Cara lebih aman: Cek index atau teks persis jika mau
+                if (poliName === 'Umum' && btn.innerText === 'Poli Umum') btn.classList.add('active');
+            });
+
+            // Filter Data Sesuai Poli
+            const dataPoli = allData.filter(item => item.poli === poliName);
+            
+            // Grouping by Dokter (Karena 1 dokter punya banyak baris hari)
+            // Hasil: { "Dr. Andi": [dataSenin, dataSelasa...], "Dr. Budi": [...] }
+            const grouped = {};
+            dataPoli.forEach(item => {
+                if(!grouped[item.nama_dokter]) grouped[item.nama_dokter] = [];
+                grouped[item.nama_dokter].push(item);
+            });
+
+            // Render HTML
+            const container = document.getElementById('mainContent');
+            container.innerHTML = "";
+
+            if (Object.keys(grouped).length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">Tidak ada data untuk Poli ${poliName}</p>`;
+                return;
+            }
+
+            // Loop setiap dokter
+            for (const [dokter, jadwalList] of Object.entries(grouped)) {
+                // Sort hari biar urut (Senin, Selasa, ...)
+                const urutan = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+                jadwalList.sort((a, b) => urutan.indexOf(a.hari) - urutan.indexOf(b.hari));
+
+                let rowsHTML = "";
+                jadwalList.forEach(jadwal => {
+                    rowsHTML += `
+                        <div class="schedule-row">
+                            <span class="day-label">${jadwal.hari}</span>
+                            <input type="text" class="time-input" 
+                                   value="${jadwal.jam}" 
+                                   data-id="${jadwal.id}">
+                        </div>
+                    `;
+                });
+
+                const cardHTML = `
+                    <div class="doctor-card">
+                        <div class="doctor-header">
+                            <img src="../aset/gambar-dokter.png" class="doctor-img">
+                            <span class="doctor-name">${dokter}</span>
+                        </div>
+                        <div class="schedule-list">
+                            ${rowsHTML}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            }
+        }
+
+        // 3. Fungsi Simpan
+        async function simpanJadwal() {
+            // Ambil semua input yang ada di layar
+            const inputs = document.querySelectorAll('.time-input');
+            const updates = [];
+
+            inputs.forEach(input => {
+                updates.push({
+                    id: input.getAttribute('data-id'),
+                    jam: input.value
+                });
+            });
+
+            try {
+                const response = await fetch('http://localhost:3000/users/jadwal-dokter', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updates)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Jadwal berhasil diperbarui!");
+                    // Refresh data biar sinkron
+                    loadData(); 
+                } else {
+                    alert("Gagal: " + result.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Gagal menyimpan data.");
+            }
+        }
+
+        // Jalankan saat awal
+        loadData();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panggil Antrian - Klinik Unsri</title>
+    <link rel="stylesheet" href="panggil-antrian.css">
+</head>
+<body>
+    <div class="container">
+       
+
+        <!-- Header -->
+        <div class="header">
+            <a href="admin-home.html" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Kembali
+            </a>
+            <h1>Panggil Antrian</h1>
+        </div>
+
+        <!-- Content -->
+      <div class="content">
+
+    <div class="antrian-card" id="card-umum">
+        <div class="card-content">
+            <div class="doctor-section">
+                <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                <p class="doctor-name">Dr. Umum</p>
+            </div>
+            <div class="antrian-info">
+                <div class="room-badge">Ruang 01</div>
+                <div class="numbers-row">
+                    <div class="number-item">
+                        <span class="label">Sekarang</span>
+                        <span class="number nomor-sekarang">-</span>
+                    </div>
+                    <div class="number-item">
+                        <span class="label">Selanjutnya</span>
+                        <span class="number nomor-selanjutnya">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-panggil" onclick="panggil('Dr. Umum')">PANGGIL</button>
+    </div>
+
+    <div class="antrian-card" id="card-gigi">
+        <div class="card-content">
+            <div class="doctor-section">
+                <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                <p class="doctor-name">Dr. Gigi</p>
+            </div>
+            <div class="antrian-info">
+                <div class="room-badge">Ruang 02</div>
+                <div class="numbers-row">
+                    <div class="number-item">
+                        <span class="label">Sekarang</span>
+                        <span class="number nomor-sekarang">-</span>
+                    </div>
+                    <div class="number-item">
+                        <span class="label">Selanjutnya</span>
+                        <span class="number nomor-selanjutnya">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-panggil" onclick="panggil('Dr. Gigi')">PANGGIL</button>
+    </div>
+
+    <div class="antrian-card" id="card-anak">
+        <div class="card-content">
+            <div class="doctor-section">
+                <img src="../aset/gambar-dokter.png" alt="Doctor" class="doctor-img">
+                <p class="doctor-name">Dr. Anak</p>
+            </div>
+            <div class="antrian-info">
+                <div class="room-badge">Ruang 03</div>
+                <div class="numbers-row">
+                    <div class="number-item">
+                        <span class="label">Sekarang</span>
+                        <span class="number nomor-sekarang">-</span>
+                    </div>
+                    <div class="number-item">
+                        <span class="label">Selanjutnya</span>
+                        <span class="number nomor-selanjutnya">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-panggil" onclick="panggil('Dr. Anak')">PANGGIL</button>
+    </div>
+
+</div>
+
+<script src="panggil-antrian-real.js"></script>
+
+</body>
+</html>

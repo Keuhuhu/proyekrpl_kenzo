@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - Klinik Unsri</title>
+    <link rel="stylesheet" href="pengaturan-admin.css">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <a href="admin-home.html" class="back-btn" style="text-decoration:none; color:white; display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                <svg width="24" height="35" viewBox="0 0 24 24" fill="white">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                <span style="font-weight:500;">Kembali</span>
+            </a>
+
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+                    <span class="logo-text">Pengaturan Admin</span>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="content">
+
+            <!-- Pengaturan Akun Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleAkun()">
+                    <h3 class="section-title">
+                        <img src="../aset/pengaturan-akun.png" alt="User" class="section-icon">
+                        Pengaturan Akun
+                    </h3>
+                    <svg class="chevron" id="chevron-akun" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                
+                <div class="menu-list submenu" id="akun-menu"> 
+                    
+    
+                    <a href="#" onclick="logout()" class="menu-item">
+                         <img src="../aset/keluar.png" alt="Keluar" class="menu-icon-img">
+                           <span>Keluar</span>
+                    </a>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAkun() {
+            const menu = document.getElementById('akun-menu');
+            const chevron = document.getElementById('chevron-akun');
+            menu.classList.toggle('active');
+            chevron.classList.toggle('rotate');
+        }
+
+        //logout
+        function logout() {
+            if (confirm("Apakah kamu yakin ingin keluar dari akun?")) {
+                localStorage.clear(); //hapus local storage
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+       
+    </script>
+</body>
+</html>

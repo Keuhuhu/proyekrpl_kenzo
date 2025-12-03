@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil - Klinik Unsri</title>
+    <link rel="stylesheet" href="edit-profile.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <a href="../home.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Beranda</span>
+            </a>
+            <a href="profile.html" class="top-nav-item active">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Profil</span>
+            </a>
+            <a href="riwayat.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Riwayat</span>
+            </a>
+        </nav>
+
+        <!-- Header with Back Button -->
+        <div class="header">
+            <a href="profile.html" class="back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Kembali
+            </a>
+            <h1 class="page-title">Edit Profil</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Profile Photo Section -->
+            <div class="photo-section">
+                <div class="profile-photo">
+                    <img src="../aset/profilfr.png" alt="Profile Photo" id="profileImage">
+                </div>
+                
+            </div>
+
+            <!-- Form -->
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama lengkap">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Masukkan email">
+                </div>
+
+                <div class="form-group">
+                    <label for="telepon">Nomor Telepon</label>
+                    <input type="tel" id="telepon" placeholder="Masukkan nomor telepon">
+                </div>
+
+                <div class="form-group">
+                    <label for="tanggal-lahir">Tanggal Lahir</label>
+                    <input type="date" id="tanggal-lahir">
+                </div>
+
+                <div class="form-group">
+                    <label for="jenis-kelamin">Jenis Kelamin</label>
+                    <select id="jenis-kelamin">
+                        <option value="">Pilih jenis kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat Lengkap</label>
+                    <textarea id="alamat" rows="4" placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+
+                <button class="btn-save" onclick="saveProfile()">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Link ke file JavaScript terpisah -->
+    <script src="edit-profile.js"></script>
+</body>
+</html>

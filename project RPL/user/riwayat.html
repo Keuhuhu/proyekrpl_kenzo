@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat - Klinik Unsri</title>
+    <link rel="stylesheet" href="riwayat.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <a href="../home.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Beranda</span>
+            </a>
+            <a href="profile.html" class="top-nav-item">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Profil</span>
+            </a>
+            <a href="riwayat.html" class="top-nav-item active">
+                <div class="top-nav-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <span class="top-nav-label">Riwayat</span>
+            </a>
+        </nav>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+                    <span class="logo-text">Riwayat</span>
+                </div>
+                <a href="pengaturan.html" class="settings-btn">⚙️</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content" id="riwayatContainer">
+            <p id="loadingText" style="text-align:center; margin-top:20px;">Memuat riwayat...</p>
+
+        </div>
+    </div>
+
+<script>
+    async function loadRiwayat() {
+        const token = localStorage.getItem('token_user');
+        if (!token) {
+            alert("Silakan login dulu.");
+            window.location.href = '../pages/login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/antrian/history', {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + token },
+                cache: 'no-store'
+            });
+
+            const result = await response.json();
+            const container = document.getElementById('riwayatContainer');
+            const loadingText = document.getElementById('loadingText');
+
+            // Hilangkan teks loading
+            loadingText.style.display = 'none';
+
+            if (response.ok) {
+                const antrianList = result.data;
+
+                if (antrianList.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;">Belum ada riwayat kunjungan.</p>';
+                    return;
+                }
+
+                // Looping data dari database
+                antrianList.forEach(item => {
+                    // Format Tanggal biar cantik (DD-MM-YYYY)
+                    const dateObj = new Date(item.tanggal);
+                    const formattedDate = dateObj.toLocaleDateString('id-ID', {
+                        day: '2-digit', month: '2-digit', year: 'numeric'
+                    });
+
+                    // Tentukan status warna (Opsional, biar keren)
+                    let statusColor = 'black';
+                    if(item.status === 'menunggu') statusColor = '#e67e22'; // Orange
+                    if(item.status === 'dilayani') statusColor = '#2980b9'; // Biru
+                    if(item.status === 'selesai') statusColor = '#27ae60'; // Hijau
+
+                    // Buat HTML Kartu
+                    const cardHTML = `
+                        <div class="riwayat-card">
+                            <div class="riwayat-header">
+                                <div class="info-row">
+                                    <span class="label">Tanggal</span>
+                                    <span class="label">Dokter/Poli</span>
+                                    <span class="label">No. Antrian</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="value">${formattedDate}</span>
+                                    <span class="value">${item.nama_dokter}</span>
+                                    <span class="value" style="font-weight:bold; font-size:1.2em;">${item.nomor_antrian}</span>
+                                </div>
+                                <div class="info-row" style="margin-top:10px; border-top:1px dashed #ccc; padding-top:5px;">
+                                    <span class="label">Status:</span>
+                                    <span class="value" style="color:${statusColor}; text-transform:uppercase; font-weight:bold;">${item.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Masukkan ke dalam container
+                    container.innerHTML += cardHTML;
+                });
+
+            } else {
+                alert("Gagal memuat data: " + result.message);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Gagal koneksi ke server");
+        }
+    }
+
+    // Jalankan saat halaman dibuka
+    loadRiwayat();
+</script>
+
+</body>
+</html>

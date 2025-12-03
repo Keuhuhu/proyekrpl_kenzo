@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pasien - Admin Klinik</title>
+    <link rel="stylesheet" href="admin-riwayat.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <a href="admin-home.html" class="btn-back">
+                ← Kembali
+            </a>
+            <h2>Data Riwayat Pasien</h2>
+        </div>
+
+        <div class="content">
+            <div class="table-container">
+                <table id="tabelPasien">
+                    <thead>
+                        <tr>
+                            <th>Pasien</th>
+                            <th>Dokter</th>
+                            <th>No. Antrian</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyRiwayat">
+                        <tr><td colspan="5" style="text-align:center; padding:30px;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+    async function loadAllData() {
+        const token = localStorage.getItem('token_user'); 
+        
+        if(!token) {
+            alert("Harap login sebagai admin!");
+            window.location.href = 'admin-login.html';
+            return;
+        }
+
+        try {
+            // TIP: Check if your route is under 'antrian' or 'users'. 
+            // Based on previous chats, it was likely '/antrian/all-history'
+            const response = await fetch('http://localhost:3000/users/all-history', { 
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + token },
+                cache: 'no-store'
+            });
+
+            const result = await response.json();
+            const tbody = document.getElementById('tbodyRiwayat');
+            
+            if (response.ok) {
+                const data = result.data;
+                
+                if(data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px;">Belum ada data pasien sama sekali.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                
+                data.forEach(item => {
+                    
+                    // 1. FIX: Define formattedDate correctly
+                    let formattedDate = "-"; 
+
+                    if (item.tanggal) {
+                        try {
+                            const dateObj = new Date(item.tanggal);
+                            if (!isNaN(dateObj.getTime())) {
+                                formattedDate = dateObj.toLocaleDateString('id-ID', {
+                                    day: '2-digit', month: 'long', year: 'numeric'
+                                });
+                            } else {
+                                formattedDate = item.tanggal; 
+                            }
+                        } catch (e) {
+                            console.warn("Tanggal error:", item.tanggal);
+                            formattedDate = item.tanggal;
+                        }
+                    }
+
+                    let badgeClass = 'status-menunggu';
+                    let badgeText = item.status ? item.status.toUpperCase() : "UNKNOWN";
+
+                    if(item.status === 'dilayani') badgeClass = 'status-dilayani';
+                    if(item.status === 'selesai') badgeClass = 'status-selesai';
+
+                    html += `
+                        <tr>
+                            <td>
+                                <div class="user-info">${item.nama_pasien || 'Tanpa Nama'}</div>
+                            </td>
+                            <td>${item.nama_dokter || '-'}</td>
+                            <td style="font-weight:bold; color:#8BC34A; text-align:center;">
+                                #${item.nomor_antrian}
+                            </td>
+                            <td class="date-info">${formattedDate}</td>
+                            <td>
+                                <span class="badge ${badgeClass}">${badgeText}</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tbody.innerHTML = html;
+
+            } else {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">${result.message}</td></tr>`;
+            }
+
+        } catch (error) {
+            console.error("Error Admin Riwayat:", error);
+            const tbody = document.getElementById('tbodyRiwayat');
+            if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal koneksi ke server.<br><small>${error.message}</small></td></tr>`;
+        }
+    }
+
+    loadAllData();
+</script>
+
+</body>
+</html>

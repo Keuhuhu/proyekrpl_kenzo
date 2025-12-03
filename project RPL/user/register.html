@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Klinik Unsri</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="../aset/logo-unsri.png" alt="Logo Unsri" class="logo-img">
+                <span class="logo-text">Klinik Unsri</span>
+            </div>
+        </div>
+
+        <!-- Welcome Text -->
+        <div class="welcome-text">
+            <h1>SELAMAT</h1>
+            <h1>DATANG</h1>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <button class="tab" onclick="window.location.href='login.html'">Masuk</button>
+            <button class="tab active">Daftar</button>
+        </div>
+
+        <!-- Register Form -->
+        <form class="form" id="regform" action="http://localhost:3000/users" method="post">
+            <!-- User Type Selection -->
+            <div class="user-type">
+                <label class="checkbox-inline">
+                    <input type="radio" name="role" value="mahasiswa">
+                    <span>Mahasiswa</span>
+                </label>
+                <label class="checkbox-inline">
+                    <input type="radio" name="role" value="dosen">
+                    <span>Dosen</span>
+                </label>
+                <label class="checkbox-inline">
+                    <input type="radio" name="role" value="umum">
+                    <span>Umum</span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>Nama</label>
+                <input type="text" id="nama" placeholder="Masukkan nama anda.." required>
+            </div>
+
+            <div class="form-group">
+                <label>Nomor Handphone</label>
+                <input type="tel" id="no_hp" placeholder="Masukkan Nomor anda.." required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Masukkan email anda.." required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Masukkan password anda.." required>
+            </div>
+
+            <button type="submit" class="btn-submit">Daftar</button>
+
+            <div class="divider">
+                <span>atau</span>
+            </div>
+
+            <a href="../admin/admin-login.html" class="admin-link">Masuk sebagai Admin</a>
+        </form>
+    </div>
+
+<script>
+    const form = document.getElementById('regform');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+
+        // 1. Cek Role
+        const roleElement = document.querySelector('input[name="role"]:checked');
+        
+        if (!roleElement) {
+            alert("Silakan pilih status (Mahasiswa/Dosen/Umum)");
+            return;
+        }
+
+        // 2. Ambil SEMUA data dari form (Lengkapi bagian ini!)
+        const data = {
+            nama: document.getElementById('nama').value,
+            no_hp: document.getElementById('no_hp').value, // <--- JANGAN LUPA INI
+            email: document.getElementById('email').value, // <--- JANGAN LUPA INI
+            password: document.getElementById('password').value, // <--- JANGAN LUPA INI
+            role: roleElement.value 
+        };
+
+        try {
+            // 3. Kirim ke Backend
+            const response = await fetch('http://localhost:3000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("Registrasi Berhasil! Mengalihkan ke login...");
+                window.location.href = 'login.html'; 
+            } else {
+                alert("Gagal: " + result.message);
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Terjadi kesalahan koneksi.");
+        }
+    });
+</script>
+
+</body>
+</html>
